@@ -1,1 +1,2 @@
 # Python dependencies. Added as each feature needs them.
+psutil==7.2.2
