@@ -4,8 +4,8 @@ import signal
 from detector import input_watch
 from detector import netwatch
 from detector import scoring
+from detector import alerts
 from detector.logger import get_logger
-
 
 log = get_logger()
 
@@ -70,6 +70,10 @@ def run_once():
                 verdict.pid, verdict.name, verdict.score,
                 "; ".join(verdict.reasons),
             )
+            if alerts.send_alert(verdict):
+                log.debug("Alert for pid=%s sent to backend.", verdict.pid)
+            else:
+                log.warning("Could not reach backend for pid=%s alert.", verdict.pid)
         elif verdict.score > 0:
             log.info(
                 "watch pid=%s name=%s score=%s :: %s",
